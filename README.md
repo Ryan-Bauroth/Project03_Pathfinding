@@ -1,24 +1,33 @@
 # A* Algorithm
 
 ## Description
-This project contains a UI visualization of 2D heuristic pathfinding. The A* Algorithm then finds a path between user-set start and end points, balancing short path distance and quick calculations, all while avoiding obstacles.
+This project contains a UI visualization of 2D heuristic pathfinding. The A* Algorithm finds a path between user-set start and end points, balancing short path distance and quick calculations, all while avoiding obstacles.
 
 ## Installation & Use
-1) Clone the repository by copying the HTTPS link into the IDE of your choice
-2) Turn diagonal pathfinding on and off at the bottom of the enviroment.py file
-3) Run the enviroment.py file
-4) Edit key path points by selecting the start (red) and end (green) menu options
-5) Add obstacles by selecting the obstacle (black) menu option
-6) Choose to visualize either the final path, or the proccess, using the visualization toggle (white) menu option
-7) Notice the computation time highlighted in the top right
+1. Clone the repository by copying the HTTPS link into the IDE of your choice.
+2. Turn diagonal pathfinding on or off at the bottom of the `environment.py` file.
+3. Run the `environment.py` file.
+4. Edit key path points by selecting the start (red) and end (green) menu options.
+5. Add obstacles by selecting the obstacle (black) menu option.
+6. Choose to visualize either the final path or the process using the visualization toggle (white) menu option.
+7. Note the computation time highlighted in the top right.
 
 ## Heuristic Functions
-This project uses two heuristic functions in order to pathfind.
+This project uses two heuristic functions for pathfinding:
 
-For pathfinding with diagonal movement disabled, the algorithm uses manhattan distance in order to pathfinder (ie: abs(start_x - target_x) + abs(start_y - target_y)). This estimates the distance from the target from a particular point.
+- **Manhattan Distance**:
+  
+![Manhattan Formula](https://latex.codecogs.com/svg.latex?\text{abs}(start_x%20-%20target_x)%20+%20\text{abs}(start_y%20-%20target_y))
 
-For pathfinding with diagonal movement enabled, the algorithm uses euclidian distance in order to pathfind (ie: sqrt((start_x - target_x)^2 + (start_y - target_y)^2)). This more accurately relfects the diagonal movement costs than the manhattan distance.
+- **Euclidean Distance**:
+   
+![Euclidean Formula](https://latex.codecogs.com/svg.latex?\sqrt{(start_x%20-%20target_x)^2%20+%20(start_y%20-%20target_y)^2})
+
+These heuristic functions are used to estimate the distance from a given point to the target:
+
+1. Manhattan Distance is used when diagonal movement is **disabled**, providing an estimation of the distance from the target.
+2. Euclidean Distance is used when diagonal movement is **enabled**, offering a more accurate calculation for diagonal movement costs.
 
 ## Resources
-- ChatGPT and JetBrains AI for occational code support and method documenation
-- PyGame for algorithm visualization and path customization
+- ChatGPT and JetBrains AI for occasional code support and method documentation.
+- PyGame for algorithm visualization and path customization.
