@@ -10,7 +10,7 @@ This project contains a UI visualization of 2D heuristic pathfinding. The A* Alg
 4. Edit key path points by selecting the start (red) and end (green) menu options.
 5. Add obstacles by selecting the obstacle (black) menu option.
 6. Choose to visualize either the final path or the process using the visualization toggle (white) menu option.
-7. Note the computation time highlighted in the top right.
+7. Note the computation time displayed in the top right.
 
 ## Heuristic Functions
 This project uses two heuristic functions for pathfinding:
