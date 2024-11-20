@@ -1,3 +1,4 @@
+import math
 import time
 import heapq
 
@@ -54,6 +55,7 @@ class AStar:
         self.path = []
         self.moves = MOVES if diagonal else MOVES[:4]
         self.explored_paths = []
+        self.diagonal = diagonal
 
     def get_manhattan_distance(self, position, target_position):
         """
@@ -62,6 +64,9 @@ class AStar:
         :return: The Manhattan distance between the current position and the target position.
         """
         return abs(position[0] - target_position[0]) + abs(position[1] - target_position[1])
+
+    def get_euclidean_distance(self, position, target_position):
+        return math.sqrt((position[0] - target_position[0]) ** 2 + (position[1] - target_position[1]) ** 2)
 
 
     def add_neighbors(self, init_node):
@@ -76,7 +81,7 @@ class AStar:
             if 0 <= new_pos[0] < len(self.grid) and 0 <= new_pos[1] < len(self.grid[0]):
                 if self.grid[new_pos[0]][new_pos[1]] == 0:  # Check if not an obstacle
                     g_cost = init_node.g + 1
-                    h_cost = self.get_manhattan_distance(new_pos, self.target_pos)
+                    h_cost = self.get_euclidean_distance(new_pos, self.target_pos) if self.diagonal else self.get_manhattan_distance(new_pos, self.target_pos)
                     new_node = Node(new_pos, g=g_cost, h=h_cost, parent=init_node)
 
                     # Check if this node is in the open list or needs to be updated

@@ -82,13 +82,15 @@ class Environment:
         run_env():
             Runs the environment visualization, including handling user interactions and updating the display.
     """
-    def __init__(self, start_pos, target_pos, diagonal=False, highlight_explored_path=False):
+    def __init__(self, start_pos, target_pos, diagonal=False, highlight_explored_path=False, obstacles=None):
+        if obstacles is None:
+            obstacles = []
         self.start = start_pos
         self.target = target_pos
         self.grid = [[0 for _ in range(dimensions[0])] for _ in range(dimensions[1])]
         # 0 -> Start, 1 -> End, 2 -> Obstacle
         self.current_placement_piece = 0
-        self.obstacles = []
+        self.obstacles = obstacles or []
         self.path = []
         self.time = 0
 
@@ -96,6 +98,13 @@ class Environment:
 
         self.highlight_explored_path = highlight_explored_path
         self.explored_path = []
+
+    def clamp(self, num, min, max):
+        if num < min:
+            num = min
+        elif num > max:
+            num = max
+        return num
 
     def update_path(self):
         """
@@ -134,6 +143,8 @@ class Environment:
         self.update_obstacles(self.grid)
 
         explored_path_idx = 0
+        mouse_held_down = False
+        locations_changed = []
 
         # Run the game loop
         running = True
@@ -143,22 +154,10 @@ class Environment:
                     running = False
                 # on click
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    pos = pygame.mouse.get_pos()
                     if event.button == 1:
-                        pos = pygame.mouse.get_pos()
-                        # if user is clicking the grid
                         if pos[1] > 40:
-                            col = (pos[0] - 5) // block_size
-                            row = (pos[1] - 35) // block_size
-                            # depending on placement piece, updates what objects were clicked
-                            if self.current_placement_piece == 2:
-                                self.grid[row][col] = (1 - self.grid[row][col])
-                                self.update_obstacles(self.grid)
-                            elif self.current_placement_piece == 0:
-                                self.start = (row, col)
-                            else:
-                                self.target = (row, col)
-                            self.update_path()
-                            explored_path_idx = 0
+                            mouse_held_down = True
                         # if user is clicking menu options
                         else:
                             col = (pos[0]) // block_size
@@ -174,6 +173,31 @@ class Environment:
                                 self.highlight_explored_path = not self.highlight_explored_path
                                 self.update_path()
                                 explored_path_idx = 0
+
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if event.button == 1:  # Left mouse button
+                        mouse_held_down = False
+                        locations_changed = []
+
+            if mouse_held_down:
+                pos = pygame.mouse.get_pos()
+                # if user is clicking the grid
+                if pos[1] > 40:
+                    col = self.clamp((pos[0] - 5) // block_size, 0, dimensions[1] - 1)
+                    row = self.clamp((pos[1] - 35) // block_size, 0, dimensions[0] - 1)
+                    print(row, col)
+                    if row < dimensions[0] and col < dimensions[1] and (row, col) not in locations_changed:
+                        locations_changed.append((row, col))
+                        # depending on placement piece, updates what objects were clicked
+                        if self.current_placement_piece == 2:
+                            self.grid[row][col] = (1 - self.grid[row][col])
+                            self.update_obstacles(self.grid)
+                        elif self.current_placement_piece == 0:
+                            self.start = (row, col)
+                        else:
+                            self.target = (row, col)
+                        self.update_path()
+                        explored_path_idx = 0
 
             # Fill the background
             screen.fill(BACKGROUND_COLOR)
