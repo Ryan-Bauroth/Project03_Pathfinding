@@ -18,3 +18,7 @@ This project uses two heuristic functions in order to pathfind.
 For pathfinding with diagonal movement disabled, the algorithm uses manhattan distance in order to pathfinder (ie: abs(start_x - target_x) + abs(start_y - target_y)). This estimates the distance from the target from a particular point.
 
 For pathfinding with diagonal movement enabled, the algorithm uses euclidian distance in order to pathfind (ie: sqrt((start_x - target_x)^2 + (start_y - target_y)^2)). This more accurately relfects the diagonal movement costs than the manhattan distance.
+
+## Resources
+- ChatGPT and JetBrains AI for occational code support and method documenation
+- PyGame for algorithm visualization and path customization
