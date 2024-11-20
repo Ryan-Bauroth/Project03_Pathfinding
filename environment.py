@@ -100,6 +100,12 @@ class Environment:
         self.explored_path = []
 
     def clamp(self, num, min, max):
+        """
+        :param num: The number to be clamped.
+        :param min: The minimum value to clamp the number to.
+        :param max: The maximum value to clamp the number to.
+        :return: The clamped value of the number within the given range.
+        """
         if num < min:
             num = min
         elif num > max:
