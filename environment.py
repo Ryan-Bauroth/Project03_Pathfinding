@@ -191,7 +191,6 @@ class Environment:
                 if pos[1] > 40:
                     col = self.clamp((pos[0] - 5) // block_size, 0, dimensions[1] - 1)
                     row = self.clamp((pos[1] - 35) // block_size, 0, dimensions[0] - 1)
-                    print(row, col)
                     if row < dimensions[0] and col < dimensions[1] and (row, col) not in locations_changed:
                         locations_changed.append((row, col))
                         # depending on placement piece, updates what objects were clicked
@@ -372,5 +371,5 @@ if __name__ == "__main__":
     # runs on main
     start_pos = (0, 0)
     target_pos = (4, 4)
-    env = Environment(start_pos, target_pos, True, True)
+    env = Environment(start_pos, target_pos, True, False)
     env.run_env()

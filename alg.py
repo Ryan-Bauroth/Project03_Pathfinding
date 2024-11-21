@@ -83,9 +83,16 @@ class AStar:
                     h_cost = self.get_euclidean_distance(new_pos, self.target_pos) if self.diagonal else self.get_manhattan_distance(new_pos, self.target_pos)
                     new_node = Node(new_pos, g=g_cost, h=h_cost, parent=init_node)
 
-                    # Check if this node is in the open list or needs to be updated
-                    if new_node not in self.closed_list and (new_node not in self.open_list or new_node.f < next((n for n in self.open_list if n == new_node), new_node).f):
-                        self.open_list.append(new_node)
+                    # if node is not already scanned
+                    if new_node not in self.closed_list:
+                        # get the existing version of the node, if it already exists in the open list
+                        existing_node = next((n for n in self.open_list if n == new_node), None)
+
+                        # if the node doesn't already exist, or there is a shorter path to the node, update it
+                        if existing_node is None or new_node.f < existing_node.f:
+                            if existing_node:
+                                self.open_list.remove(existing_node)  # Remove the older version
+                            self.open_list.append(new_node)  # Add the updated version
 
     def find_path(self):
         """
