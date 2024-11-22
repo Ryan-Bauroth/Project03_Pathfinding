@@ -81,6 +81,8 @@ class Environment:
             Updates the list of obstacles based on the current grid.
         run_env():
             Runs the environment visualization, including handling user interactions and updating the display.
+
+        AI was used for the development of this class
     """
     def __init__(self, start_pos, target_pos, diagonal=False, obstacles=None, show_time=True, diagonal_cost=True):
         if obstacles is None:
