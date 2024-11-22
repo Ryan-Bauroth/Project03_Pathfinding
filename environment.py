@@ -385,6 +385,6 @@ if __name__ == "__main__":
         target_pos,
         diagonal=True,
         diagonal_cost=False,
-        show_time=False
+        show_time=True
     )
     env.run_env()
