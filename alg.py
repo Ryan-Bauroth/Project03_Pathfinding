@@ -66,6 +66,11 @@ class AStar:
         return abs(position[0] - target_position[0]) + abs(position[1] - target_position[1])
 
     def get_euclidean_distance(self, position, target_position):
+        """
+        :param position: A tuple representing the x and y coordinates of the first point.
+        :param target_position: A tuple representing the x and y coordinates of the second point.
+        :return: The Euclidean distance between the two points.
+        """
         return math.sqrt((position[0] - target_position[0]) ** 2 + (position[1] - target_position[1]) ** 2)
 
 
