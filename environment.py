@@ -82,7 +82,7 @@ class Environment:
         run_env():
             Runs the environment visualization, including handling user interactions and updating the display.
     """
-    def __init__(self, start_pos, target_pos, diagonal=False, highlight_explored_path=False, obstacles=None):
+    def __init__(self, start_pos, target_pos, diagonal=False, obstacles=None, show_time=True, diagonal_cost=True):
         if obstacles is None:
             obstacles = []
         self.start = start_pos
@@ -92,11 +92,15 @@ class Environment:
         self.current_placement_piece = 0
         self.obstacles = obstacles or []
         self.path = []
+
         self.time = 0
+        self.cost = 0
+        self.show_time = show_time
 
         self.diagonal = diagonal
+        self.diagonal_cost = diagonal_cost
 
-        self.highlight_explored_path = highlight_explored_path
+        self.highlight_explored_path = False
         self.explored_path = []
 
     def clamp(self, num, min, max):
@@ -118,8 +122,8 @@ class Environment:
 
         :return: None
         """
-        alg = AStar(self.grid, self.start, self.target, self.diagonal)
-        self.path, self.time = alg.find_path()
+        alg = AStar(self.grid, self.start, self.target, self.diagonal, diagonal_cost=self.diagonal_cost)
+        self.path, self.time, self.cost = alg.find_path()
         self.explored_path = alg.get_explored_paths()
 
     def update_obstacles(self, grid):
@@ -348,10 +352,15 @@ class Environment:
                             LIGHT_GRAY,
                         )
 
-            # shows time taken to run
-            text = f"{self.time:.2e}"
-            text_surface = font.render(text, True, (0, 0, 0))  # True for anti-aliased text, color is black
-            screen.blit(text_surface, (width - text_surface.get_rect().width + 2, 7))
+            if self.show_time:
+                # shows time taken to run
+                text = f"{self.time:.2e}"
+                text_surface = font.render(text, True, (0, 0, 0))  # True for anti-aliased text, color is black
+                screen.blit(text_surface, (width - text_surface.get_rect().width + 2, 7))
+            else:
+                text = f"{self.cost:.2f}".rstrip('0').rstrip('.')
+                text_surface = font.render(text, True, (0, 0, 0))  # True for anti-aliased text, color is black
+                screen.blit(text_surface, (width - text_surface.get_rect().width + 2, 7))
 
             # Update the display
             pygame.display.flip()
@@ -371,5 +380,11 @@ if __name__ == "__main__":
     # runs on main
     start_pos = (0, 0)
     target_pos = (4, 4)
-    env = Environment(start_pos, target_pos, True, False)
+    env = Environment(
+        start_pos,
+        target_pos,
+        diagonal=True,
+        diagonal_cost=True,
+        show_time=False
+    )
     env.run_env()

@@ -45,7 +45,7 @@ class AStar:
 
     def __init__(self, grid, start_pos, target_pos, diagonal=False):
         """
-    def __init__(self, grid, start_pos, target_pos, diagonal=False):
+    def __init__(self, grid, start_pos, target_pos, diagonal=False, diagonal_cost=True):
         self.grid = grid
         self.start_pos = start_pos
         self.target_pos = target_pos
@@ -55,6 +55,7 @@ class AStar:
         self.moves = MOVES if diagonal else MOVES[:4]
         self.explored_paths = []
         self.diagonal = diagonal
+        self.diagonal_cost = diagonal_cost
 
     def get_manhattan_distance(self, position, target_position):
         """
@@ -74,12 +75,16 @@ class AStar:
         :return: None
         """
         for move in self.moves:
+            added_g_cost = 1
+            if self.diagonal and self.diagonal_cost:
+                if move[0] != 0 and move[1] != 0:
+                    added_g_cost = math.sqrt(2)
             new_pos = (init_node.position[0] + move[0], init_node.position[1] + move[1])
 
             # Ensure new position is within grid bounds
             if 0 <= new_pos[0] < len(self.grid) and 0 <= new_pos[1] < len(self.grid[0]):
                 if self.grid[new_pos[0]][new_pos[1]] == 0:  # Check if not an obstacle
-                    g_cost = init_node.g + 1
+                    g_cost = init_node.g + added_g_cost
                     h_cost = self.get_euclidean_distance(new_pos, self.target_pos) if self.diagonal else self.get_manhattan_distance(new_pos, self.target_pos)
                     new_node = Node(new_pos, g=g_cost, h=h_cost, parent=init_node)
 
@@ -122,13 +127,14 @@ class AStar:
 
             # if the curr_node is the target
             if curr_node.position == self.target_pos:
+                total_cost = curr_node.g
                 while curr_node.parent:
                     self.path.append(curr_node.position)
                     curr_node = curr_node.parent
                 self.path.append(self.start_pos)
                 self.path.reverse()
                 end_time = time.time()
-                return self.path, (end_time - start_time)
+                return self.path, (end_time - start_time), total_cost
 
             self.add_neighbors(curr_node)
 
