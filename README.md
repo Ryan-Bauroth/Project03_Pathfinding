@@ -32,4 +32,4 @@ These heuristic functions are used to estimate the distance from a given point t
 - ChatGPT and JetBrains AI for occasional code support and method documentation.
 - PyGame for algorithm visualization and path customization.
 
-This README is edited by AI
+*This README is edited by AI*
